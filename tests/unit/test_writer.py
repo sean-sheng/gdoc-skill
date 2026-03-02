@@ -119,6 +119,17 @@ def test_sanitize_filename_combination_edge_cases():
     assert sanitize_filename("...---my-doc---...") == "my-doc"
 
 
+def test_create_frontmatter():
+    """Test YAML frontmatter generation."""
+    result = create_frontmatter("Test Document", "https://docs.google.com/document/d/123/edit")
+
+    assert "---" in result
+    assert 'title: "Test Document"' in result
+    assert 'source: "https://docs.google.com/document/d/123/edit"' in result
+    assert "fetched:" in result
+    assert result.endswith("---\n\n")
+
+
 def test_create_frontmatter_basic():
     """Test basic frontmatter creation."""
     result = create_frontmatter("Test Doc", "https://example.com")
