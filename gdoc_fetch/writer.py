@@ -15,6 +15,17 @@ def sanitize_filename(name: str) -> str:
     Returns:
         Sanitized filename safe for filesystem
     """
+    # Strip and normalize all whitespace (including tabs, newlines, etc)
+    name = ' '.join(name.split())
+
+    # Return default if empty or only whitespace
+    if not name:
+        return 'untitled'
+
+    # Reject path traversal patterns
+    if name in ('.', '..'):
+        return 'untitled'
+
     # Remove invalid filesystem characters
     name = re.sub(r'[/\\:*?"<>|]', '', name)
 
@@ -30,10 +41,27 @@ def sanitize_filename(name: str) -> str:
     # Trim hyphens from start/end
     name = name.strip('-')
 
+    # Remove leading and trailing dots (hidden files and Windows compatibility)
+    name = name.strip('.')
+
     # Limit length
     name = name[:200]
 
-    # Return default if empty
+    # Re-strip hyphens and dots after length limiting
+    name = name.strip('-.')
+
+
+    # Check for Windows reserved names
+    windows_reserved = {
+        'con', 'prn', 'aux', 'nul',
+        'com1', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8', 'com9',
+        'lpt1', 'lpt2', 'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9'
+    }
+    base_name = name.split('.')[0].lower()
+    if base_name in windows_reserved:
+        name = f'_{name}'
+
+    # Return default if empty after all sanitization
     return name if name else 'untitled'
 
 
@@ -49,9 +77,22 @@ def create_frontmatter(title: str, source_url: str) -> str:
         YAML frontmatter string
     """
     date = datetime.now().strftime('%Y-%m-%d')
+
+    # Escape YAML special characters to prevent injection
+    def escape_yaml_value(value: str) -> str:
+        """Escape YAML value by using double quotes and escaping special chars."""
+        # Escape backslashes first, then double quotes
+        value = value.replace('\\', '\\\\').replace('"', '\\"')
+        # Replace newlines and other control characters
+        value = value.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
+        return f'"{value}"'
+
+    title_escaped = escape_yaml_value(title)
+    source_escaped = escape_yaml_value(source_url)
+
     return f"""---
-title: {title}
-source: {source_url}
+title: {title_escaped}
+source: {source_escaped}
 fetched: {date}
 ---
 

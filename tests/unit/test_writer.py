@@ -40,3 +40,142 @@ def test_sanitize_filename_only_special_chars():
 def test_sanitize_filename_leading_trailing_hyphens():
     """Test removal of leading/trailing hyphens."""
     assert sanitize_filename("-document-") == "document"
+
+
+def test_sanitize_filename_whitespace_only():
+    """Test that whitespace-only strings return default."""
+    assert sanitize_filename("\n\t\r") == "untitled"
+    assert sanitize_filename("\n") == "untitled"
+    assert sanitize_filename("\t") == "untitled"
+
+
+def test_sanitize_filename_whitespace_normalization():
+    """Test normalization of various whitespace characters."""
+    assert sanitize_filename("Doc\twith\ttabs") == "doc-with-tabs"
+    assert sanitize_filename("Doc\nwith\nnewlines") == "doc-with-newlines"
+    assert sanitize_filename("Doc\r\nwith\r\nCRLF") == "doc-with-crlf"
+    assert sanitize_filename("Doc  \t\n  mixed   whitespace") == "doc-mixed-whitespace"
+
+
+def test_sanitize_filename_path_traversal():
+    """Test prevention of path traversal patterns."""
+    assert sanitize_filename("..") == "untitled"
+    assert sanitize_filename(".") == "untitled"
+
+
+def test_sanitize_filename_hidden_files():
+    """Test removal of leading dots to prevent hidden files."""
+    assert sanitize_filename(".hidden") == "hidden"
+    assert sanitize_filename("..hidden") == "hidden"
+    assert sanitize_filename("...multiple") == "multiple"
+
+
+def test_sanitize_filename_windows_reserved_names():
+    """Test handling of Windows reserved names."""
+    # Device names
+    assert sanitize_filename("CON") == "_con"
+    assert sanitize_filename("PRN") == "_prn"
+    assert sanitize_filename("AUX") == "_aux"
+    assert sanitize_filename("NUL") == "_nul"
+
+    # COM ports
+    assert sanitize_filename("COM1") == "_com1"
+    assert sanitize_filename("com5") == "_com5"
+    assert sanitize_filename("COM9") == "_com9"
+
+    # LPT ports
+    assert sanitize_filename("LPT1") == "_lpt1"
+    assert sanitize_filename("lpt5") == "_lpt5"
+    assert sanitize_filename("LPT9") == "_lpt9"
+
+    # With extensions
+    assert sanitize_filename("CON.txt") == "_con.txt"
+    assert sanitize_filename("PRN.md") == "_prn.md"
+
+
+def test_sanitize_filename_hyphen_after_length_limit():
+    """Test that hyphens are stripped after length limiting."""
+    # Create a name that will have a hyphen at position 200
+    long_name = "a" * 199 + "-" + "b" * 50
+    result = sanitize_filename(long_name)
+    assert len(result) <= 200
+    assert not result.endswith("-")
+
+
+def test_sanitize_filename_combination_edge_cases():
+    """Test combination of multiple edge cases."""
+    # Whitespace + special chars + path traversal
+    assert sanitize_filename("  ..  ") == "untitled"
+
+    # Hidden file + special chars
+    assert sanitize_filename(".my/doc:name") == "mydocname"
+
+    # Windows reserved + special chars - CON:file becomes confile which is not reserved
+    # But CON alone would be reserved
+    assert sanitize_filename("CON:file") == "confile"
+    assert sanitize_filename("CON: ") == "_con"
+
+    # Leading dots + hyphens
+    assert sanitize_filename("...---my-doc---...") == "my-doc"
+
+
+def test_create_frontmatter_basic():
+    """Test basic frontmatter creation."""
+    result = create_frontmatter("Test Doc", "https://example.com")
+    assert 'title: "Test Doc"' in result
+    assert 'source: "https://example.com"' in result
+    assert "fetched:" in result
+    assert result.startswith("---")
+    assert "---\n\n" in result
+
+
+def test_create_frontmatter_yaml_injection_newline():
+    """Test prevention of YAML injection via newlines."""
+    malicious_title = "My Doc\nsource: evil.com"
+    result = create_frontmatter(malicious_title, "https://example.com")
+
+    # Should escape the newline, not create a new YAML field
+    assert "\\n" in result
+    assert 'title: "My Doc\\nsource: evil.com"' in result
+    assert 'source: "https://example.com"' in result
+
+
+def test_create_frontmatter_yaml_injection_quotes():
+    """Test prevention of YAML injection via quotes."""
+    malicious_title = 'My Doc"\nsource: evil.com\ntitle: "Real Title'
+    result = create_frontmatter(malicious_title, "https://example.com")
+
+    # Should escape quotes and newlines
+    assert '\\"' in result
+    assert '\\n' in result
+
+
+def test_create_frontmatter_special_chars():
+    """Test handling of various special characters."""
+    title = "Doc: with * special & chars # test"
+    result = create_frontmatter(title, "https://example.com?param=value")
+
+    # Should be properly quoted
+    assert 'title: "Doc: with * special & chars # test"' in result
+    assert 'source: "https://example.com?param=value"' in result
+
+
+def test_create_frontmatter_control_characters():
+    """Test handling of control characters."""
+    title = "Doc\twith\ttabs"
+    url = "https://example.com"
+    result = create_frontmatter(title, url)
+
+    # Should escape control characters
+    assert "\\t" in result
+    assert 'title: "Doc\\twith\\ttabs"' in result
+
+
+def test_create_frontmatter_backslashes():
+    """Test handling of backslashes."""
+    title = "Path\\to\\document"
+    result = create_frontmatter(title, "https://example.com")
+
+    # Should escape backslashes
+    assert "\\\\" in result
+    assert 'title: "Path\\\\to\\\\document"' in result
