@@ -1,17 +1,18 @@
 # gdoc-fetch
 
-Fetch Google Docs, download images, and convert to Markdown.
+Fetch Google Docs, download images, and convert to Markdown. Upload Markdown files to create new Google Docs.
 
-A standalone Python CLI tool that integrates seamlessly with Claude Code, allowing you to fetch Google Docs documents, download embedded images, and convert everything to clean Markdown format.
+A standalone Python CLI tool that integrates seamlessly with Claude Code, allowing you to fetch Google Docs documents, download embedded images, convert to Markdown format, and upload Markdown files back to Google Docs.
 
 ## ✨ Features
 
 - 📥 **Fetch Google Docs** - Works with both public and private documents
-- 🖼️ **Download Images** - Automatically downloads and embeds images with authentication
-- 📝 **Clean Markdown** - Preserves formatting (bold, italic, links, lists, tables)
+- 📤 **Upload to Google Docs** - Convert Markdown files to Google Docs with formatting
+- 🖼️ **Image Support** - Download images from Docs, upload images from Markdown
+- 📝 **Clean Markdown** - Preserves formatting (bold, italic, links, lists, code blocks)
 - 🔒 **Secure** - Uses Google Cloud authentication (no API keys needed)
 - 🤖 **Claude Code Ready** - Integrates as a skill for seamless use in conversations
-- ✅ **Well Tested** - 58 comprehensive unit tests with 100% pass rate
+- ✅ **Well Tested** - Comprehensive unit tests with high coverage
 
 ## 🚀 Quick Start
 
@@ -24,8 +25,11 @@ pip3 install --user -e .
 # 2. Authenticate (one-time)
 gcloud auth login --enable-gdrive-access
 
-# 3. Use it!
+# 3. Fetch a Google Doc
 gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
+
+# Or upload a Markdown file
+gdoc-upload document.md
 ```
 
 ## 📚 Documentation
@@ -36,10 +40,16 @@ gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
 
 ## 💻 Usage
 
-### Basic Command
+### Fetch from Google Docs
 
 ```bash
 gdoc-fetch <google-doc-url> [--output-dir ./output] [--no-images]
+```
+
+### Upload to Google Docs
+
+```bash
+gdoc-upload <markdown_file> [--title TITLE] [--no-images]
 ```
 
 ### Examples
@@ -57,6 +67,31 @@ gdoc-fetch "https://docs.google.com/document/d/123abc/edit" --no-images
 # Use document ID directly
 gdoc-fetch "123abc"
 ```
+
+### Upload to Google Docs
+
+Convert and upload Markdown files to create new Google Docs:
+
+```bash
+# Upload markdown file
+gdoc-upload document.md
+
+# Upload with custom title
+gdoc-upload document.md --title "My Project Spec"
+
+# Upload without images (faster)
+gdoc-upload document.md --no-images
+```
+
+**Supported Markdown Features:**
+- Headings (H1-H6)
+- Bold, italic, links
+- Bulleted and numbered lists
+- Code blocks (rendered as monospace)
+- Images (automatically uploaded to Google Drive)
+
+**Output:**
+The command outputs a clickable Google Docs URL for the newly created document.
 
 ### Output Structure
 
@@ -113,14 +148,18 @@ PYTHONPATH=. pytest tests/ -v
 gdoc-skill/
 ├── gdoc_fetch/         # Source code
 │   ├── auth.py         # Authentication
-│   ├── cli.py          # CLI entry point
+│   ├── cli.py          # CLI entry point (fetch)
+│   ├── cli_upload.py   # CLI entry point (upload)
 │   ├── converter.py    # Docs→HTML→Markdown
+│   ├── docs_builder.py # Markdown→Docs API requests
+│   ├── drive_client.py # Google Drive API (images)
 │   ├── google_api.py   # Google Docs API client
 │   ├── images.py       # Image downloader
+│   ├── markdown_parser.py # Markdown parser
 │   ├── models.py       # Data models
 │   ├── utils.py        # URL parsing
 │   └── writer.py       # File writing
-├── tests/              # Test suite (58 tests)
+├── tests/              # Test suite
 ├── SKILL.md            # Claude Code integration
 └── README.md           # This file
 ```
@@ -139,7 +178,7 @@ See [INSTALLATION.md](INSTALLATION.md) for detailed troubleshooting guides.
 
 - Python 3.10+
 - Google Cloud SDK (gcloud)
-- Dependencies: google-api-python-client, google-auth, markdownify
+- Dependencies: google-api-python-client, google-auth, markdownify, markdown
 
 ## 🤝 Contributing
 
@@ -158,8 +197,9 @@ MIT License - See LICENSE file for details
 ## 🙏 Acknowledgments
 
 Built with:
-- [google-api-python-client](https://github.com/googleapis/google-api-python-client) - Google Docs API access
+- [google-api-python-client](https://github.com/googleapis/google-api-python-client) - Google Docs & Drive API access
 - [markdownify](https://github.com/matthewwithanm/python-markdownify) - HTML to Markdown conversion
+- [markdown](https://github.com/Python-Markdown/markdown) - Markdown to HTML parsing
 - [pytest](https://pytest.org/) - Testing framework
 
 ---
