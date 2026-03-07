@@ -24,6 +24,7 @@ dev = [
 
 [project.scripts]
 gdoc-fetch = "gdoc_fetch.cli:main"
+gdoc-upload = "gdoc_fetch.cli_upload:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
