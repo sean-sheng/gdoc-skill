@@ -1,34 +1,50 @@
 ---
-name: gdoc-fetch
-description: Fetch Google Docs, download images, convert to Markdown. Use when user provides a Google Docs URL to access requirements, specs, or documentation. Downloads the full document with images to local markdown files.
+name: gdoc-skill
+description: gdoc-fetch and gdoc-upload. Fetch Google Docs to Markdown (with images) or upload Markdown to new Google Docs. Use when user provides a Google Docs URL to read/save as Markdown, or when user wants to create a Google Doc from a Markdown file.
 ---
 
-# Google Doc Fetcher
+# Google Docs ↔ Markdown (gdoc-fetch & gdoc-upload)
 
-Fetch Google Docs and convert to Markdown with images.
+**gdoc-fetch:** Fetch Google Docs and convert to Markdown with images.  
+**gdoc-upload:** Upload Markdown files to create new Google Docs with formatting and images.
 
 ## When to Use This Tool
 
-Use `gdoc-fetch` when the user:
+Use **gdoc-fetch** when the user:
 - Provides a Google Docs URL (e.g., `https://docs.google.com/document/d/.../edit`)
 - Asks you to read, review, or analyze a Google Doc
 - Wants to import documentation, specifications, or requirements from Google Docs
 - Needs to convert a Google Doc to Markdown format
 - Wants to save a Google Doc locally with all its images
 
+Use **gdoc-upload** when the user:
+- Wants to create a Google Doc from a Markdown file
+- Asks you to upload, publish, or share a document to Google Docs
+- Has a local Markdown file (e.g. a spec or report) they want as a Google Doc
+
 ## Usage
 
-### Basic Command
+### gdoc-fetch — Fetch a Google Doc to Markdown
 
 ```bash
 gdoc-fetch "<google-doc-url>" --output-dir <project-dir>/docs
 ```
 
-### Command Options
-
+**Options:**
 - `url` (required): Google Docs URL or document ID
 - `--output-dir`: Output directory (default: `./output`)
 - `--no-images`: Skip downloading images (faster, but document won't include images)
+
+### gdoc-upload — Upload Markdown to a new Google Doc
+
+```bash
+gdoc-upload <markdown_file> [--title TITLE] [--no-images]
+```
+
+**Options:**
+- `markdown_file` (required): Path to the Markdown file
+- `--title`: Document title (default: derived from filename)
+- `--no-images`: Skip uploading images (faster)
 
 ### Typical Workflow
 
@@ -132,6 +148,17 @@ Actions:
 # Both work the same:
 gdoc-fetch "https://docs.google.com/document/d/1abc123xyz/edit"
 gdoc-fetch "1abc123xyz"
+```
+
+### Example 5: Upload Markdown to Google Docs
+
+```
+User: "Turn docs/spec.md into a Google Doc and share the link"
+
+Actions:
+1. Run: gdoc-upload docs/spec.md --title "Project Spec"
+2. Command prints the new Google Docs URL
+3. Respond: "Created: https://docs.google.com/document/d/.../edit"
 ```
 
 ## Authentication
@@ -292,8 +319,11 @@ If the tool is not installed, user should run:
 pip install -e .
 ```
 
-This installs the `gdoc-fetch` command globally.
+This installs the `gdoc-fetch` and `gdoc-upload` commands.
 
 ## Summary
 
-Use `gdoc-fetch` whenever a user shares a Google Docs URL. It's a reliable way to import documentation, specs, or any Google Doc content into the project with proper formatting and images. Always authenticate first, run the fetch command, read the output, and then discuss the content with the user.
+- **gdoc-fetch:** Use when a user shares a Google Docs URL. Fetch the doc to Markdown (with images), read the output, then discuss.
+- **gdoc-upload:** Use when a user wants a Markdown file turned into a Google Doc. Run `gdoc-upload <file>`, then share the returned Google Docs URL.
+
+Authenticate once with `gcloud auth login --enable-gdrive-access`; both commands use the same credentials.

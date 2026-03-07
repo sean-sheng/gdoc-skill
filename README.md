@@ -1,8 +1,8 @@
-# gdoc-fetch
+# gdoc-skill
 
-Fetch Google Docs, download images, and convert to Markdown.
+**gdoc-fetch** and **gdoc-upload** — fetch Google Docs to Markdown (with images) and upload Markdown to new Google Docs.
 
-A standalone Python CLI tool that integrates seamlessly with Claude Code, allowing you to fetch Google Docs documents, download embedded images, and convert everything to clean Markdown format.
+A standalone Python CLI that integrates with Claude Code: fetch Google Docs (download images, convert to Markdown) and upload Markdown files to create new Google Docs with formatting and images.
 
 ## ✨ Features
 
@@ -82,12 +82,9 @@ This uses your Google account credentials - no API keys needed!
 
 ## 🤖 Claude Code Integration
 
-Works seamlessly with Claude Code. Just paste a Google Docs URL:
-
-```
-You: "Here's a spec: https://docs.google.com/document/d/..."
-Claude: [automatically fetches and reads the document]
-```
+Works seamlessly with Claude Code:
+- **Fetch:** Paste a Google Docs URL and Claude can fetch and read the document.
+- **Upload:** Ask Claude to create a Google Doc from a Markdown file; it can run `gdoc-upload` and share the new doc link.
 
 See [SKILL.md](SKILL.md) for integration details.
 
@@ -109,8 +106,11 @@ PYTHONPATH=. pytest tests/ -v
 
 ### Project Structure
 
+This repo provides two CLIs: **gdoc-fetch** (Docs → Markdown) and **gdoc-upload** (Markdown → Docs).
+
 ```
 gdoc-skill/
+<<<<<<< HEAD
 ├── gdoc_fetch/         # Source code
 │   ├── auth.py         # Authentication
 │   ├── cli.py          # CLI entry point
@@ -123,6 +123,41 @@ gdoc-skill/
 ├── tests/              # Test suite (58 tests)
 ├── SKILL.md            # Claude Code integration
 └── README.md           # This file
+||||||| parent of 4c530e8 (refactoring the repo and reflect project that supports both gdoc fetch and upload)
+├── gdoc_fetch/         # Source code
+│   ├── auth.py         # Authentication
+│   ├── cli.py          # CLI entry point (fetch)
+│   ├── cli_upload.py   # CLI entry point (upload)
+│   ├── converter.py    # Docs→HTML→Markdown
+│   ├── docs_builder.py # Markdown→Docs API requests
+│   ├── drive_client.py # Google Drive API (images)
+│   ├── google_api.py   # Google Docs API client
+│   ├── images.py       # Image downloader
+│   ├── markdown_parser.py # Markdown parser
+│   ├── models.py       # Data models
+│   ├── utils.py        # URL parsing
+│   └── writer.py       # File writing
+├── tests/              # Test suite
+├── SKILL.md            # Claude Code integration
+└── README.md           # This file
+=======
+├── gdoc_fetch/           # Shared source
+│   ├── auth.py           # Authentication
+│   ├── cli.py            # gdoc-fetch entry point
+│   ├── cli_upload.py     # gdoc-upload entry point
+│   ├── converter.py      # Docs→HTML→Markdown
+│   ├── docs_builder.py   # Markdown→Docs API requests
+│   ├── drive_client.py   # Google Drive API (images)
+│   ├── google_api.py     # Google Docs API client
+│   ├── images.py         # Image download/upload
+│   ├── markdown_parser.py # Markdown parser
+│   ├── models.py         # Data models
+│   ├── utils.py          # URL parsing
+│   └── writer.py         # File writing
+├── tests/                # Test suite
+├── SKILL.md              # Claude Code integration
+└── README.md             # This file
+>>>>>>> 4c530e8 (refactoring the repo and reflect project that supports both gdoc fetch and upload)
 ```
 
 ## 🐛 Troubleshooting
@@ -164,4 +199,4 @@ Built with:
 
 ---
 
-**Made with ❤️ for seamless Google Docs integration with Claude Code**
+**Made with ❤️ for seamless Google Docs ↔ Markdown with Claude Code (gdoc-fetch + gdoc-upload)**
