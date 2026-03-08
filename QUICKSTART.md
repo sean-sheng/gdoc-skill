@@ -1,16 +1,16 @@
-# gdoc-fetch Quick Start Guide
+# gdoc-skill Quick Start Guide
 
-Get up and running with gdoc-fetch in 5 minutes!
+Get up and running with **gdoc-fetch** and **gdoc-upload** in 5 minutes!
 
 ## 🚀 Quick Installation (3 steps)
 
-### 1. Install the tool
+### 1. Install the tools
 
 ```bash
 # Navigate to the project
 cd /path/to/gdoc-skill
 
-# Install
+# Install (installs both gdoc-fetch and gdoc-upload)
 pip3 install --user -e .
 ```
 
@@ -24,8 +24,11 @@ gcloud auth login --enable-gdrive-access
 ### 3. Test it!
 
 ```bash
-# Fetch a public Google Doc
+# Fetch a Google Doc to Markdown
 gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
+
+# Or upload a Markdown file to create a new Google Doc
+gdoc-upload document.md
 ```
 
 Done! ✅
@@ -34,23 +37,23 @@ Done! ✅
 
 ## 📋 Common Usage Patterns
 
-### Fetch to current directory
+### Fetch (Docs → Markdown)
 ```bash
 gdoc-fetch "<url>" --output-dir .
+gdoc-fetch "<url>" --no-images   # skip images (faster)
 ```
 
-### Skip images (faster)
+### Upload (Markdown → Docs)
 ```bash
-gdoc-fetch "<url>" --no-images
+gdoc-upload document.md
+gdoc-upload document.md --title "My Doc"
+gdoc-upload document.md --no-images   # skip images (faster)
 ```
 
 ### Use with Claude Code
 
-Just paste a Google Docs URL in your conversation:
-```
-You: "Review this spec: https://docs.google.com/document/d/..."
-Claude: [automatically fetches and reads the document]
-```
+- **Fetch:** Paste a Google Docs URL — Claude can fetch and read it.
+- **Upload:** Ask Claude to create a Google Doc from a Markdown file — it can run `gdoc-upload` and share the link.
 
 ---
 
@@ -95,9 +98,10 @@ pip3 install --user google-api-python-client google-auth markdownify
 
 ## 💡 Pro Tips
 
-1. **Alias for convenience**:
+1. **Aliases for convenience**:
    ```bash
    alias gfetch='gdoc-fetch'
+   alias gupload='gdoc-upload'
    ```
 
 2. **Check what's shared with you**:

@@ -1,6 +1,6 @@
-# gdoc-fetch Installation Tutorial
+# gdoc-skill Installation Tutorial
 
-Complete guide to installing and configuring the gdoc-fetch skill for Claude Code.
+Complete guide to installing and configuring **gdoc-fetch** and **gdoc-upload** for Claude Code.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ Complete guide to installing and configuring the gdoc-fetch skill for Claude Cod
 
 ## Prerequisites
 
-Before installing gdoc-fetch, ensure you have:
+Before installing gdoc-skill (gdoc-fetch and gdoc-upload), ensure you have:
 
 ### Required Software
 
@@ -115,20 +115,16 @@ pip3 install --break-system-packages -e .
 #### Step 3: Verify Installation
 
 ```bash
-# Check if gdoc-fetch is available
+# Check both commands are available
 which gdoc-fetch
+which gdoc-upload
 
-# Test the command
+# Test the commands
 gdoc-fetch --help
+gdoc-upload --help
 ```
 
-You should see:
-```
-usage: gdoc-fetch [-h] [--output-dir OUTPUT_DIR] [--no-images] url
-
-Fetch Google Docs, download images, convert to Markdown
-...
-```
+You should see help for both: `gdoc-fetch` (fetch Docs → Markdown) and `gdoc-upload` (upload Markdown → Docs).
 
 ---
 
@@ -144,7 +140,7 @@ pip3 install --user gdoc-fetch
 
 ## Google Cloud Authentication
 
-The gdoc-fetch tool uses Google Cloud SDK for authentication. This is a **one-time setup**.
+Both gdoc-fetch and gdoc-upload use Google Cloud SDK for authentication. This is a **one-time setup**.
 
 ### Step 1: Initialize gcloud (First Time Only)
 
@@ -190,7 +186,7 @@ You should see a long token string (starting with `ya29.`).
 
 ## Claude Code Integration
 
-To use gdoc-fetch as a skill within Claude Code conversations:
+To use gdoc-skill (gdoc-fetch and gdoc-upload) within Claude Code conversations:
 
 ### Step 1: Locate Your Skills Directory
 
@@ -228,9 +224,9 @@ ls ~/.claude/skills/gdoc-fetch/SKILL.md
 ### Step 3: Verify Claude Code Can See It
 
 The skill should now be automatically available in Claude Code. The SKILL.md file tells Claude:
-- When to use the skill (when user provides a Google Docs URL)
-- How to invoke it (command syntax)
-- What to expect (output format)
+- When to use gdoc-fetch (e.g. when user provides a Google Docs URL)
+- When to use gdoc-upload (e.g. when user wants a Markdown file as a Google Doc)
+- How to invoke each command and what to expect
 
 ### Step 4: Test in Claude Code
 
@@ -246,6 +242,8 @@ Claude should automatically:
 2. Invoke `gdoc-fetch` to download it
 3. Read the generated markdown
 4. Discuss the content with you
+
+For uploads, you can say e.g. "Create a Google Doc from docs/report.md" and Claude can run `gdoc-upload` and share the new doc link.
 
 ---
 
@@ -292,7 +290,8 @@ gcloud auth print-access-token
 ### Test 3: Python Import Test
 
 ```bash
-python3 -c "from gdoc_fetch.cli import main; print('✓ Import successful')"
+python3 -c "from gdoc_fetch.cli import main; print('✓ gdoc-fetch import OK')"
+python3 -c "from gdoc_fetch.cli_upload import main; print('✓ gdoc-upload import OK')"
 ```
 
 ### Test 4: Run Full Test Suite
@@ -313,7 +312,7 @@ PYTHONPATH=. pytest tests/ -v
 
 ## Troubleshooting
 
-### Issue: "Command not found: gdoc-fetch"
+### Issue: "Command not found: gdoc-fetch" or "gdoc-upload"
 
 **Solution 1: Check PATH**
 ```bash
@@ -327,6 +326,7 @@ source ~/.bashrc  # or source ~/.zshrc
 **Solution 2: Use Full Path**
 ```bash
 python3 -m gdoc_fetch.cli "<url>"
+python3 -m gdoc_fetch.cli_upload document.md
 ```
 
 **Solution 3: Reinstall**
@@ -404,11 +404,7 @@ ls ~/.claude/skills/gdoc-fetch/SKILL.md
 **Solution 2: Check SKILL.md format**
 ```bash
 head -10 ~/.claude/skills/gdoc-fetch/SKILL.md
-# Should start with:
-# ---
-# name: gdoc-fetch
-# description: ...
-# ---
+# Should start with frontmatter (name: gdoc-skill or gdoc-fetch, description mentioning fetch and upload)
 ```
 
 **Solution 3: Restart Claude Code**
@@ -458,6 +454,7 @@ Add to your shell configuration:
 # In ~/.bashrc or ~/.zshrc
 alias gfetch='gdoc-fetch'
 alias gfetch-here='gdoc-fetch --output-dir .'
+alias gupload='gdoc-upload'
 
 # Reload
 source ~/.bashrc
@@ -467,6 +464,7 @@ Now you can use:
 ```bash
 gfetch "<url>"
 gfetch-here "<url>"
+gupload document.md
 ```
 
 ### Skip Images by Default
@@ -486,10 +484,10 @@ chmod +x ~/bin/gdoc-fetch-fast
 
 ## Uninstallation
 
-If you need to remove gdoc-fetch:
+If you need to remove gdoc-skill (gdoc-fetch and gdoc-upload):
 
 ```bash
-# Uninstall the package
+# Uninstall the package (removes both CLIs)
 pip3 uninstall gdoc-fetch
 
 # Remove the skill from Claude Code
@@ -522,23 +520,23 @@ pip3 list | grep -E 'google|markdownify'
 ### Common Commands Summary
 
 ```bash
-# Basic usage
+# Fetch: Docs → Markdown
 gdoc-fetch "<url>"
-
-# Custom output location
 gdoc-fetch "<url>" --output-dir ./my-docs
-
-# Skip images (faster)
 gdoc-fetch "<url>" --no-images
-
-# Use document ID directly
 gdoc-fetch "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms"
+
+# Upload: Markdown → Docs
+gdoc-upload document.md
+gdoc-upload document.md --title "My Doc"
+gdoc-upload document.md --no-images
 
 # Re-authenticate
 gcloud auth login --enable-gdrive-access
 
 # Test installation
-python3 -m gdoc_fetch.cli --help
+gdoc-fetch --help
+gdoc-upload --help
 ```
 
 ---
@@ -564,4 +562,4 @@ Once installed and working:
 
 ---
 
-**Happy Document Fetching! 📄✨**
+**Happy fetching and uploading! 📄✨**
