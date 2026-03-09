@@ -19,13 +19,17 @@ A standalone Python CLI that integrates with Claude Code: fetch Google Docs (dow
 See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide!
 
 ```bash
-# 1. Install
+# 1. Clone the repository
+git clone https://github.com/sean-sheng/gdoc-fetcher.git
+cd gdoc-fetcher
+
+# 2. Install
 pip3 install --user -e .
 
-# 2. Authenticate (one-time)
+# 3. Authenticate (one-time)
 gcloud auth login --enable-gdrive-access
 
-# 3. Fetch a Google Doc
+# 4. Fetch a Google Doc
 gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
 
 # Or upload a Markdown file
@@ -136,7 +140,7 @@ pip3 install -e ".[dev]"
 ```bash
 PYTHONPATH=. pytest tests/ -v
 
-# Expected: 58 tests passed
+# Expected: 121 tests passed
 ```
 
 ### Project Structure

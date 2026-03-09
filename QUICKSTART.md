@@ -7,8 +7,9 @@ Get up and running with **gdoc-fetch** and **gdoc-upload** in 5 minutes!
 ### 1. Install the tools
 
 ```bash
-# Navigate to the project
-cd /path/to/gdoc-skill
+# Clone the repository
+git clone https://github.com/sean-sheng/gdoc-fetcher.git
+cd gdoc-fetcher
 
 # Install (installs both gdoc-fetch and gdoc-upload)
 pip3 install --user -e .
@@ -83,7 +84,7 @@ gcloud auth login --enable-gdrive-access
 
 ### Module not found?
 ```bash
-pip3 install --user google-api-python-client google-auth markdownify
+pip3 install --user google-api-python-client google-auth markdownify markdown
 ```
 
 ---
