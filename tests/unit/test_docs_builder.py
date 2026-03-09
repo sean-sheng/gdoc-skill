@@ -1,8 +1,8 @@
 """Tests for Google Docs API request builder."""
 import pytest
 
-from gdoc_fetch.docs_builder import DocsRequestBuilder
-from gdoc_fetch.models import (
+from gdoc_upload.docs_builder import DocsRequestBuilder
+from gdoc_common.models import (
     Paragraph, Heading, ListItem, CodeBlock, Image, TextRun
 )
 

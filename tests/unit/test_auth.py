@@ -2,7 +2,7 @@
 import subprocess
 from unittest.mock import patch, MagicMock
 import pytest
-from gdoc_fetch.auth import get_access_token, AuthenticationError
+from gdoc_common.auth import get_access_token, AuthenticationError
 
 
 def test_get_access_token_from_user_account(mocker):

@@ -3,13 +3,13 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 from googleapiclient.errors import HttpError
 
-from gdoc_fetch.drive_client import DriveClient
+from gdoc_upload.drive_client import DriveClient
 
 
 @pytest.fixture
 def mock_drive_service():
     """Create a mock Drive service."""
-    with patch('gdoc_fetch.drive_client.build') as mock_build:
+    with patch('gdoc_upload.drive_client.build') as mock_build:
         mock_service = MagicMock()
         mock_build.return_value = mock_service
         yield mock_service

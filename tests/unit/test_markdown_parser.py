@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from gdoc_fetch.markdown_parser import MarkdownParser
-from gdoc_fetch.models import (
+from gdoc_upload.markdown_parser import MarkdownParser
+from gdoc_common.models import (
     MarkdownDocument, Paragraph, Heading, ListItem, CodeBlock, Image, TextRun
 )
 

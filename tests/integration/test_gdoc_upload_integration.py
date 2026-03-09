@@ -6,9 +6,9 @@ from typing import List
 
 import pytest
 
-from gdoc_fetch.google_api import DocsClient
-from gdoc_fetch.markdown_parser import MarkdownParser
-from gdoc_fetch.docs_builder import DocsRequestBuilder
+from gdoc_common.google_api import DocsClient
+from gdoc_upload.markdown_parser import MarkdownParser
+from gdoc_upload.docs_builder import DocsRequestBuilder
 
 
 @pytest.mark.integration
@@ -230,7 +230,7 @@ class TestMarkdownParserIntegration:
         assert len(doc.elements) > 0
 
         # Verify different element types exist
-        from gdoc_fetch.models import Heading, Paragraph, ListItem, CodeBlock, Image
+        from gdoc_common.models import Heading, Paragraph, ListItem, CodeBlock, Image
 
         has_heading = any(isinstance(e, Heading) for e in doc.elements)
         has_paragraph = any(isinstance(e, Paragraph) for e in doc.elements)

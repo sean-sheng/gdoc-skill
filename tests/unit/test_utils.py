@@ -1,6 +1,6 @@
 """Tests for utility functions."""
 import pytest
-from gdoc_fetch.utils import extract_doc_id
+from gdoc_common.utils import extract_doc_id
 
 
 def test_extract_doc_id_from_url():

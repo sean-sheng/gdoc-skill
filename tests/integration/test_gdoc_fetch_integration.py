@@ -5,7 +5,7 @@ from typing import List
 
 import pytest
 
-from gdoc_fetch.google_api import DocsClient
+from gdoc_common.google_api import DocsClient
 from gdoc_fetch.converter import DocsToHtmlParser, HtmlToMarkdownConverter
 from tests.integration.conftest import PUBLIC_TEST_DOC_ID, PUBLIC_TEST_DOC_URL
 

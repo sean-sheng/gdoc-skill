@@ -2,8 +2,8 @@
 from unittest.mock import MagicMock, Mock
 import pytest
 from googleapiclient.errors import HttpError
-from gdoc_fetch.google_api import DocsClient
-from gdoc_fetch.models import Document
+from gdoc_common.google_api import DocsClient
+from gdoc_common.models import Document
 
 
 def test_docs_client_fetch_document(mocker):

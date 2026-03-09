@@ -16,6 +16,10 @@ dependencies = [
     "markdownify>=0.11.0",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gdoc_*"]
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
@@ -24,7 +28,7 @@ dev = [
 
 [project.scripts]
 gdoc-fetch = "gdoc_fetch.cli:main"
-gdoc-upload = "gdoc_fetch.cli_upload:main"
+gdoc-upload = "gdoc_upload.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

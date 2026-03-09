@@ -1,6 +1,6 @@
 """Tests for image downloading module."""
 from gdoc_fetch.images import extract_image_urls
-from gdoc_fetch.models import Document, InlineObject
+from gdoc_common.models import Document, InlineObject
 from unittest.mock import Mock, patch, MagicMock
 import pytest
 

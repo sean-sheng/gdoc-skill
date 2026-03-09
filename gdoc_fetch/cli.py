@@ -3,9 +3,9 @@ import argparse
 import sys
 from pathlib import Path
 
-from gdoc_fetch.auth import get_access_token, AuthenticationError
-from gdoc_fetch.utils import extract_doc_id
-from gdoc_fetch.google_api import DocsClient
+from gdoc_common.auth import get_access_token, AuthenticationError
+from gdoc_common.utils import extract_doc_id
+from gdoc_common.google_api import DocsClient
 from gdoc_fetch.converter import DocsToHtmlParser, HtmlToMarkdownConverter
 from gdoc_fetch.images import extract_image_urls, download_images
 from gdoc_fetch.writer import write_document, replace_image_placeholders

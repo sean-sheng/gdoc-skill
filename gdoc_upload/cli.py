@@ -4,12 +4,12 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-from gdoc_fetch.auth import get_access_token, AuthenticationError
-from gdoc_fetch.markdown_parser import MarkdownParser
-from gdoc_fetch.docs_builder import DocsRequestBuilder
-from gdoc_fetch.google_api import DocsClient
-from gdoc_fetch.drive_client import DriveClient
-from gdoc_fetch.models import Image
+from gdoc_common.auth import get_access_token, AuthenticationError
+from gdoc_upload.markdown_parser import MarkdownParser
+from gdoc_upload.docs_builder import DocsRequestBuilder
+from gdoc_common.google_api import DocsClient
+from gdoc_upload.drive_client import DriveClient
+from gdoc_common.models import Image
 
 
 def parse_args():

@@ -1,7 +1,7 @@
 """Build Google Docs API requests from markdown elements."""
 from typing import List, Dict, Any
 
-from gdoc_fetch.models import (
+from gdoc_common.models import (
     Paragraph, Heading, ListItem, CodeBlock, Image, TextRun
 )
 

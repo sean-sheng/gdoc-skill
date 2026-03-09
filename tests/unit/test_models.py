@@ -1,5 +1,5 @@
 """Tests for document models."""
-from gdoc_fetch.models import (
+from gdoc_common.models import (
     Document, Tab, InlineObject,
     TextRun, Paragraph, Heading, ListItem, CodeBlock, Image, MarkdownDocument
 )

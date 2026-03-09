@@ -7,8 +7,8 @@ from typing import Generator, List
 
 import pytest
 
-from gdoc_fetch.auth import get_access_token, AuthenticationError
-from gdoc_fetch.google_api import DocsClient
+from gdoc_common.auth import get_access_token, AuthenticationError
+from gdoc_common.google_api import DocsClient
 
 
 @pytest.fixture(scope="session")

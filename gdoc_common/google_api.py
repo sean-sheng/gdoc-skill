@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 
-from gdoc_fetch.models import Document, InlineObject
+from gdoc_common.models import Document, InlineObject
 
 
 class DocsClient:

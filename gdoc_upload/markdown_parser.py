@@ -6,7 +6,7 @@ from typing import List, Optional
 
 import markdown
 
-from gdoc_fetch.models import (
+from gdoc_common.models import (
     MarkdownDocument, Paragraph, Heading, ListItem, CodeBlock, Image, TextRun
 )
 
