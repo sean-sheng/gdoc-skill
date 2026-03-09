@@ -7,25 +7,33 @@ A standalone Python CLI that integrates with Claude Code: fetch Google Docs (dow
 ## ✨ Features
 
 - 📥 **Fetch Google Docs** - Works with both public and private documents
-- 🖼️ **Download Images** - Automatically downloads and embeds images with authentication
-- 📝 **Clean Markdown** - Preserves formatting (bold, italic, links, lists, tables)
+- 📤 **Upload to Google Docs** - Convert Markdown files to Google Docs with formatting
+- 🖼️ **Image Support** - Download images from Docs, upload images from Markdown
+- 📝 **Clean Markdown** - Preserves formatting (bold, italic, links, lists, code blocks)
 - 🔒 **Secure** - Uses Google Cloud authentication (no API keys needed)
 - 🤖 **Claude Code Ready** - Integrates as a skill for seamless use in conversations
-- ✅ **Well Tested** - 58 comprehensive unit tests with 100% pass rate
+- ✅ **Well Tested** - Comprehensive unit tests with high coverage
 
 ## 🚀 Quick Start
 
 See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide!
 
 ```bash
-# 1. Install
+# 1. Clone the repository
+git clone https://github.com/sean-sheng/gdoc-fetcher.git
+cd gdoc-fetcher
+
+# 2. Install
 pip3 install --user -e .
 
-# 2. Authenticate (one-time)
+# 3. Authenticate (one-time)
 gcloud auth login --enable-gdrive-access
 
-# 3. Use it!
+# 4. Fetch a Google Doc
 gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
+
+# Or upload a Markdown file
+gdoc-upload document.md
 ```
 
 ## 📚 Documentation
@@ -36,10 +44,16 @@ gdoc-fetch "https://docs.google.com/document/d/YOUR_DOC_ID/edit"
 
 ## 💻 Usage
 
-### Basic Command
+### Fetch from Google Docs
 
 ```bash
 gdoc-fetch <google-doc-url> [--output-dir ./output] [--no-images]
+```
+
+### Upload to Google Docs
+
+```bash
+gdoc-upload <markdown_file> [--title TITLE] [--no-images]
 ```
 
 ### Examples
@@ -57,6 +71,31 @@ gdoc-fetch "https://docs.google.com/document/d/123abc/edit" --no-images
 # Use document ID directly
 gdoc-fetch "123abc"
 ```
+
+### Upload to Google Docs
+
+Convert and upload Markdown files to create new Google Docs:
+
+```bash
+# Upload markdown file
+gdoc-upload document.md
+
+# Upload with custom title
+gdoc-upload document.md --title "My Project Spec"
+
+# Upload without images (faster)
+gdoc-upload document.md --no-images
+```
+
+**Supported Markdown Features:**
+- Headings (H1-H6)
+- Bold, italic, links
+- Bulleted and numbered lists
+- Code blocks (rendered as monospace)
+- Images (automatically uploaded to Google Drive)
+
+**Output:**
+The command outputs a clickable Google Docs URL for the newly created document.
 
 ### Output Structure
 
@@ -101,7 +140,7 @@ pip3 install -e ".[dev]"
 ```bash
 PYTHONPATH=. pytest tests/ -v
 
-# Expected: 58 tests passed
+# Expected: 121 tests passed
 ```
 
 ### Project Structure
@@ -110,37 +149,6 @@ This repo provides two CLIs: **gdoc-fetch** (Docs → Markdown) and **gdoc-uploa
 
 ```
 gdoc-skill/
-<<<<<<< HEAD
-├── gdoc_fetch/         # Source code
-│   ├── auth.py         # Authentication
-│   ├── cli.py          # CLI entry point
-│   ├── converter.py    # Docs→HTML→Markdown
-│   ├── google_api.py   # Google Docs API client
-│   ├── images.py       # Image downloader
-│   ├── models.py       # Data models
-│   ├── utils.py        # URL parsing
-│   └── writer.py       # File writing
-├── tests/              # Test suite (58 tests)
-├── SKILL.md            # Claude Code integration
-└── README.md           # This file
-||||||| parent of 4c530e8 (refactoring the repo and reflect project that supports both gdoc fetch and upload)
-├── gdoc_fetch/         # Source code
-│   ├── auth.py         # Authentication
-│   ├── cli.py          # CLI entry point (fetch)
-│   ├── cli_upload.py   # CLI entry point (upload)
-│   ├── converter.py    # Docs→HTML→Markdown
-│   ├── docs_builder.py # Markdown→Docs API requests
-│   ├── drive_client.py # Google Drive API (images)
-│   ├── google_api.py   # Google Docs API client
-│   ├── images.py       # Image downloader
-│   ├── markdown_parser.py # Markdown parser
-│   ├── models.py       # Data models
-│   ├── utils.py        # URL parsing
-│   └── writer.py       # File writing
-├── tests/              # Test suite
-├── SKILL.md            # Claude Code integration
-└── README.md           # This file
-=======
 ├── gdoc_fetch/           # Shared source
 │   ├── auth.py           # Authentication
 │   ├── cli.py            # gdoc-fetch entry point
@@ -157,7 +165,6 @@ gdoc-skill/
 ├── tests/                # Test suite
 ├── SKILL.md              # Claude Code integration
 └── README.md             # This file
->>>>>>> 4c530e8 (refactoring the repo and reflect project that supports both gdoc fetch and upload)
 ```
 
 ## 🐛 Troubleshooting
@@ -174,7 +181,7 @@ See [INSTALLATION.md](INSTALLATION.md) for detailed troubleshooting guides.
 
 - Python 3.10+
 - Google Cloud SDK (gcloud)
-- Dependencies: google-api-python-client, google-auth, markdownify
+- Dependencies: google-api-python-client, google-auth, markdownify, markdown
 
 ## 🤝 Contributing
 
@@ -193,8 +200,9 @@ MIT License - See LICENSE file for details
 ## 🙏 Acknowledgments
 
 Built with:
-- [google-api-python-client](https://github.com/googleapis/google-api-python-client) - Google Docs API access
+- [google-api-python-client](https://github.com/googleapis/google-api-python-client) - Google Docs & Drive API access
 - [markdownify](https://github.com/matthewwithanm/python-markdownify) - HTML to Markdown conversion
+- [markdown](https://github.com/Python-Markdown/markdown) - Markdown to HTML parsing
 - [pytest](https://pytest.org/) - Testing framework
 
 ---

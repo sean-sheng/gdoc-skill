@@ -75,12 +75,8 @@ This method gives you the most control and is best for development or customizat
 cd ~/projects  # or wherever you keep your projects
 
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/gdoc-skill.git
-
-# Or if you have it locally, copy it:
-cp -r /Users/ss/development/gdoc-skill ~/projects/gdoc-skill
-
-cd gdoc-skill
+git clone https://github.com/sean-sheng/gdoc-fetcher.git
+cd gdoc-fetcher
 ```
 
 #### Step 2: Install the Package
@@ -205,7 +201,7 @@ mkdir -p ~/.claude/skills/
 
 ```bash
 # Create a symlink to your installation
-ln -s ~/projects/gdoc-skill ~/.claude/skills/gdoc-fetch
+ln -s ~/path/to/gdoc-fetcher ~/.claude/skills/gdoc-fetch
 
 # Verify
 ls -la ~/.claude/skills/
@@ -215,7 +211,7 @@ ls -la ~/.claude/skills/
 
 ```bash
 # Copy the entire directory
-cp -r ~/projects/gdoc-skill ~/.claude/skills/gdoc-fetch
+cp -r ~/path/to/gdoc-fetcher ~/.claude/skills/gdoc-fetch
 
 # Verify
 ls ~/.claude/skills/gdoc-fetch/SKILL.md
@@ -297,7 +293,7 @@ python3 -c "from gdoc_fetch.cli_upload import main; print('✓ gdoc-upload impor
 ### Test 4: Run Full Test Suite
 
 ```bash
-cd ~/projects/gdoc-skill
+cd ~/path/to/gdoc-fetcher
 
 # Install dev dependencies if not already installed
 pip3 install --user -e ".[dev]"
@@ -305,7 +301,7 @@ pip3 install --user -e ".[dev]"
 # Run tests
 PYTHONPATH=. pytest tests/ -v
 
-# Should show: 58 tests passed
+# Should show: 121 tests passed
 ```
 
 ---
@@ -332,7 +328,7 @@ python3 -m gdoc_fetch.cli_upload document.md
 **Solution 3: Reinstall**
 ```bash
 pip3 uninstall gdoc-fetch
-pip3 install --user -e ~/projects/gdoc-skill
+pip3 install --user -e ~/path/to/gdoc-fetcher
 ```
 
 ---
@@ -343,8 +339,8 @@ pip3 install --user -e ~/projects/gdoc-skill
 
 **Solution**:
 ```bash
-cd ~/projects/gdoc-skill
-pip3 install --user google-api-python-client google-auth markdownify
+cd ~/path/to/gdoc-fetcher
+pip3 install --user google-api-python-client google-auth markdownify markdown
 ```
 
 ---
@@ -494,7 +490,7 @@ pip3 uninstall gdoc-fetch
 rm -rf ~/.claude/skills/gdoc-fetch
 
 # Remove source directory (optional)
-rm -rf ~/projects/gdoc-skill
+rm -rf ~/path/to/gdoc-fetcher
 
 # Remove gcloud credentials (optional, affects other gcloud tools)
 gcloud auth revoke
@@ -554,11 +550,11 @@ Once installed and working:
 
 ## Support & Resources
 
-- **Source Code**: `/Users/ss/development/gdoc-skill/`
+- **GitHub**: https://github.com/sean-sheng/gdoc-fetcher
 - **Documentation**: `SKILL.md` - Claude Code integration guide
-- **Tests**: `tests/` - 58 comprehensive unit tests
+- **Tests**: `tests/` - 121 comprehensive unit tests
 - **Google Cloud SDK**: https://cloud.google.com/sdk/docs
-- **Issues**: Check the GitHub issues page (when published)
+- **Issues**: https://github.com/sean-sheng/gdoc-fetcher/issues
 
 ---
 
