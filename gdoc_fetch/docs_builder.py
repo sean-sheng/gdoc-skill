@@ -239,7 +239,7 @@ class DocsRequestBuilder:
         self.current_index += 1
 
         # Apply bullet formatting
-        glyph_type = 'GLYPH_TYPE_DECIMAL' if item.ordered else 'BULLET_DISC_CIRCLE_SQUARE'
+        glyph_type = 'NUMBERED_DECIMAL_ALPHA_ROMAN' if item.ordered else 'BULLET_DISC_CIRCLE_SQUARE'
 
         requests.append({
             'createParagraphBullets': {
