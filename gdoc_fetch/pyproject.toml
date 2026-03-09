@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gdoc-fetch"
+version = "0.1.0"
+description = "Fetch Google Docs to Markdown with images"
+requires-python = ">=3.10"
+dependencies = [
+    "google-api-python-client>=2.0.0",
+    "google-auth>=2.0.0",
+    "markdownify>=0.11.0",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["gdoc_common", "gdoc_fetch"]
+
+[project.scripts]
+gdoc-fetch = "gdoc_fetch.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-mock>=3.0.0",
+]
