@@ -155,7 +155,7 @@ def test_build_numbered_list_item(builder):
     requests = builder.build_content_requests([item])
 
     bullet_req = requests[2]
-    assert bullet_req['createParagraphBullets']['bulletPreset'] == 'GLYPH_TYPE_DECIMAL'
+    assert bullet_req['createParagraphBullets']['bulletPreset'] == 'NUMBERED_DECIMAL_ALPHA_ROMAN'
 
 
 def test_build_list_item_with_formatting(builder):
