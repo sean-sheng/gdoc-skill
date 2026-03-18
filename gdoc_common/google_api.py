@@ -1,10 +1,96 @@
 """Google API clients for Docs and Drive."""
-from typing import Dict, Any, List
+import requests
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Dict, Any, List, Optional
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 
 from gdoc_common.models import Document, InlineObject
+
+
+@dataclass
+class Revision:
+    """Represents a Google Doc revision."""
+    revision_id: str
+    modified_time: datetime
+    modified_by: str  # display name or email
+
+
+class DriveRevisionClient:
+    """Client for Google Drive revisions API."""
+
+    def __init__(self, token: str):
+        self._token = token
+        credentials = Credentials(token=token)
+        self.service = build('drive', 'v3', credentials=credentials)
+
+    def list_revisions(self, doc_id: str) -> List[Revision]:
+        """List all revisions for a document, newest first."""
+        revisions = []
+        page_token = None
+
+        while True:
+            kwargs = {
+                'fileId': doc_id,
+                'fields': 'nextPageToken,revisions(id,modifiedTime,lastModifyingUser)',
+                'pageSize': 200,
+            }
+            if page_token:
+                kwargs['pageToken'] = page_token
+
+            result = self.service.revisions().list(**kwargs).execute()
+
+            for rev in result.get('revisions', []):
+                user = rev.get('lastModifyingUser', {})
+                modified_by = user.get('displayName') or user.get('emailAddress', 'Unknown')
+                modified_time = datetime.fromisoformat(
+                    rev['modifiedTime'].replace('Z', '+00:00')
+                )
+                revisions.append(Revision(
+                    revision_id=rev['id'],
+                    modified_time=modified_time,
+                    modified_by=modified_by,
+                ))
+
+            page_token = result.get('nextPageToken')
+            if not page_token:
+                break
+
+        # Newest first
+        revisions.sort(key=lambda r: r.modified_time, reverse=True)
+        return revisions
+
+    def get_revision_text(self, doc_id: str, revision_id: str) -> str:
+        """Export a specific revision as plain text."""
+        import time
+
+        rev = self.service.revisions().get(
+            fileId=doc_id,
+            revisionId=revision_id,
+            fields='exportLinks',
+        ).execute()
+
+        export_url = rev.get('exportLinks', {}).get('text/plain')
+        if not export_url:
+            raise ValueError(f"No plain text export available for revision {revision_id}")
+
+        for attempt in range(5):
+            response = requests.get(
+                export_url,
+                headers={'Authorization': f'Bearer {self._token}'},
+                timeout=30,
+            )
+            if response.status_code == 429:
+                wait = 3 * (2 ** attempt)  # 3s, 6s, 12s, 24s, 48s
+                time.sleep(wait)
+                continue
+            response.raise_for_status()
+            return response.text
+
+        response.raise_for_status()
+        return response.text
 
 
 class DocsClient:

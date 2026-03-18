@@ -22,6 +22,7 @@ include = ["gdoc_common", "gdoc_fetch"]
 
 [project.scripts]
 gdoc-fetch = "gdoc_fetch.cli:main"
+gdoc-changes = "gdoc_fetch.cli_changes:main"
 
 [project.optional-dependencies]
 dev = [
