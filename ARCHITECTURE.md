@@ -62,7 +62,7 @@ gdoc_fetch/
 - Write files with proper structure
 
 **Key Classes:**
-- `DocsToHtmlParser` - Parse Google Docs JSON to HTML
+- `DocsToHtmlParser` - Parse Google Docs JSON to HTML (tables converted to narrative format using header row as field labels)
 - `HtmlToMarkdownConverter` - Convert HTML to Markdown
 
 **Main Function:**

@@ -348,7 +348,7 @@ The URL must be in one of these formats:
 - Lists (bulleted, numbered)
 - Links
 - Inline images
-- Tables (converted to markdown tables)
+- Tables (converted to narrative paragraphs with header labels)
 - Code blocks (converted to fenced code blocks)
 
 ### Limitations
