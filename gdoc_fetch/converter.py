@@ -57,8 +57,55 @@ class DocsToHtmlParser:
         """Parse a single structural element."""
         if 'paragraph' in element:
             return self._parse_paragraph(element['paragraph'])
+        elif 'table' in element:
+            return self._parse_table(element['table'])
 
         return ''
+
+    def _parse_table(self, table: Dict[str, Any]) -> str:
+        """Parse a table element into HTML."""
+        rows = table.get('tableRows', [])
+        if not rows:
+            return ''
+
+        html_rows = []
+        for row_idx, row in enumerate(rows):
+            cells = row.get('tableCells', [])
+            html_cells = []
+            for cell in cells:
+                cell_html = self._parse_cell_content(cell.get('content', []))
+                tag = 'th' if row_idx == 0 else 'td'
+                html_cells.append(f'<{tag}>{cell_html}</{tag}>')
+            html_rows.append(f'<tr>{"".join(html_cells)}</tr>')
+
+        return f'<table>{"".join(html_rows)}</table>'
+
+    def _parse_cell_content(self, content: List[Dict[str, Any]]) -> str:
+        """Parse the content elements inside a table cell."""
+        parts = []
+        i = 0
+        while i < len(content):
+            element = content[i]
+            if 'paragraph' in element and 'bullet' in element['paragraph']:
+                list_items = []
+                current_list_id = element['paragraph']['bullet'].get('listId')
+                while i < len(content):
+                    curr = content[i]
+                    if 'paragraph' in curr and 'bullet' in curr['paragraph']:
+                        if curr['paragraph']['bullet'].get('listId') == current_list_id:
+                            list_items.append(curr)
+                            i += 1
+                        else:
+                            break
+                    else:
+                        break
+                parts.append(self._parse_list(list_items, current_list_id))
+            else:
+                parsed = self._parse_structural_element(element)
+                if parsed:
+                    parts.append(parsed)
+                i += 1
+        return ''.join(parts)
 
     def _parse_list(self, list_items: List[Dict[str, Any]], list_id: str) -> str:
         """Parse a list of items into HTML."""
@@ -89,6 +136,15 @@ class DocsToHtmlParser:
 
         return f'<{tag}>{"".join(items_html)}</{tag}>'
 
+    HEADING_MAP = {
+        'HEADING_1': 'h1',
+        'HEADING_2': 'h2',
+        'HEADING_3': 'h3',
+        'HEADING_4': 'h4',
+        'HEADING_5': 'h5',
+        'HEADING_6': 'h6',
+    }
+
     def _parse_paragraph(self, paragraph: Dict[str, Any]) -> str:
         """Parse a paragraph element."""
         elements = paragraph.get('elements', [])
@@ -104,7 +160,10 @@ class DocsToHtmlParser:
         if not text:
             return ''
 
-        return f'<p>{text}</p>'
+        style_type = paragraph.get('paragraphStyle', {}).get('namedStyleType', '')
+        tag = self.HEADING_MAP.get(style_type, 'p')
+
+        return f'<{tag}>{text}</{tag}>'
 
     def _parse_inline_object(self, inline_object: Dict[str, Any]) -> str:
         """Parse an inline object (typically an image) to a placeholder."""
