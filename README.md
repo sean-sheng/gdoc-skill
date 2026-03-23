@@ -2,7 +2,7 @@
 
 **gdoc-fetch** and **gdoc-upload** — fetch Google Docs to Markdown (with images) and upload Markdown to new Google Docs.
 
-A standalone Python CLI that integrates with Claude Code: fetch Google Docs (download images, convert to Markdown) and upload Markdown files to create new Google Docs with formatting and images.
+A standalone Python CLI that integrates with Claude Code and Gemini CLI: fetch Google Docs (download images, convert to Markdown) and upload Markdown files to create new Google Docs with formatting and images.
 
 ## ✨ Features
 
@@ -11,7 +11,7 @@ A standalone Python CLI that integrates with Claude Code: fetch Google Docs (dow
 - 🖼️ **Image Support** - Download images from Docs, upload images from Markdown
 - 📝 **Clean Markdown** - Preserves formatting (bold, italic, links, lists, code blocks)
 - 🔒 **Secure** - Uses Google Cloud authentication (no API keys needed)
-- 🤖 **Claude Code Ready** - Integrates as a skill for seamless use in conversations
+- 🤖 **Claude Code & Gemini CLI Ready** - Integrates as a skill for seamless use in conversations
 - ✅ **Well Tested** - Comprehensive unit tests with high coverage
 
 ## 🚀 Quick Start
@@ -40,7 +40,7 @@ gdoc-upload document.md
 
 - **[QUICKSTART.md](QUICKSTART.md)** - Get started in 5 minutes
 - **[INSTALLATION.md](INSTALLATION.md)** - Complete installation guide with troubleshooting
-- **[SKILL.md](SKILL.md)** - Claude Code integration documentation
+- **[SKILL.md](SKILL.md)** - Claude Code & Gemini CLI integration documentation
 
 ## 💻 Usage
 
@@ -119,11 +119,11 @@ gcloud auth login --enable-gdrive-access
 
 This uses your Google account credentials - no API keys needed!
 
-## 🤖 Claude Code Integration
+## 🤖 Claude Code & Gemini CLI Integration
 
-Works seamlessly with Claude Code:
-- **Fetch:** Paste a Google Docs URL and Claude can fetch and read the document.
-- **Upload:** Ask Claude to create a Google Doc from a Markdown file; it can run `gdoc-upload` and share the new doc link.
+Works seamlessly with Claude Code and Gemini CLI:
+- **Fetch:** Paste a Google Docs URL and the assistant can fetch and read the document.
+- **Upload:** Ask the assistant to create a Google Doc from a Markdown file; it can run `gdoc-upload` and share the new doc link.
 
 See [SKILL.md](SKILL.md) for integration details.
 
@@ -175,7 +175,7 @@ gdoc-skill/
 │   ├── utils.py          # URL parsing
 │   └── writer.py         # File writing
 ├── tests/                # Test suite
-├── SKILL.md              # Claude Code integration
+├── SKILL.md              # Claude Code & Gemini CLI integration
 └── README.md             # This file
 ```
 
@@ -219,4 +219,4 @@ Built with:
 
 ---
 
-**Made with ❤️ for seamless Google Docs ↔ Markdown with Claude Code (gdoc-fetch + gdoc-upload)**
+**Made with ❤️ for seamless Google Docs ↔ Markdown with Claude Code and Gemini CLI (gdoc-fetch + gdoc-upload)**

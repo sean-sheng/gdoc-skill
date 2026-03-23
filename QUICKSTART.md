@@ -51,10 +51,10 @@ gdoc-upload document.md --title "My Doc"
 gdoc-upload document.md --no-images   # skip images (faster)
 ```
 
-### Use with Claude Code
+### Use with Claude Code & Gemini CLI
 
-- **Fetch:** Paste a Google Docs URL — Claude can fetch and read it.
-- **Upload:** Ask Claude to create a Google Doc from a Markdown file — it can run `gdoc-upload` and share the link.
+- **Fetch:** Paste a Google Docs URL — the assistant can fetch and read it.
+- **Upload:** Ask the assistant to create a Google Doc from a Markdown file — it can run `gdoc-upload` and share the link.
 
 ---
 
@@ -92,7 +92,7 @@ pip3 install --user google-api-python-client google-auth markdownify markdown
 ## 📚 Learn More
 
 - **Full Installation Guide**: [INSTALLATION.md](INSTALLATION.md)
-- **Claude Code Integration**: [SKILL.md](SKILL.md)
+- **Claude Code & Gemini CLI Integration**: [SKILL.md](SKILL.md)
 - **Usage Examples**: [README.md](README.md)
 
 ---

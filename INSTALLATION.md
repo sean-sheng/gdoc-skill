@@ -1,13 +1,13 @@
 # gdoc-skill Installation Tutorial
 
-Complete guide to installing and configuring **gdoc-fetch** and **gdoc-upload** for Claude Code.
+Complete guide to installing and configuring **gdoc-fetch** and **gdoc-upload** for Claude Code and Gemini CLI.
 
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [Installation Methods](#installation-methods)
 3. [Google Cloud Authentication](#google-cloud-authentication)
-4. [Claude Code Integration](#claude-code-integration)
+4. [Claude Code & Gemini CLI Integration](#claude-code--gemini-cli-integration)
 5. [Testing Your Installation](#testing-your-installation)
 6. [Troubleshooting](#troubleshooting)
 
@@ -180,9 +180,9 @@ You should see a long token string (starting with `ya29.`).
 
 ---
 
-## Claude Code Integration
+## Claude Code & Gemini CLI Integration
 
-To use gdoc-skill (gdoc-fetch and gdoc-upload) within Claude Code conversations:
+To use gdoc-skill (gdoc-fetch and gdoc-upload) within Claude Code and Gemini CLI conversations:
 
 ### Step 1: Locate Your Skills Directory
 
@@ -217,29 +217,29 @@ cp -r ~/path/to/gdoc-fetcher ~/.claude/skills/gdoc-fetch
 ls ~/.claude/skills/gdoc-fetch/SKILL.md
 ```
 
-### Step 3: Verify Claude Code Can See It
+### Step 3: Verify the Assistant Can See It
 
-The skill should now be automatically available in Claude Code. The SKILL.md file tells Claude:
+The skill should now be automatically available in Claude Code. For Gemini CLI, run `gemini skills install ~/.claude/skills/gdoc-fetch/SKILL.md --scope user` and then `/skills reload`. The SKILL.md file tells the assistant:
 - When to use gdoc-fetch (e.g. when user provides a Google Docs URL)
 - When to use gdoc-upload (e.g. when user wants a Markdown file as a Google Doc)
 - How to invoke each command and what to expect
 
-### Step 4: Test in Claude Code
+### Step 4: Test in Claude Code or Gemini CLI
 
-Start a new conversation in Claude Code and try:
+Start a new conversation in Claude Code or Gemini CLI and try:
 
 ```
 User: "Here's a spec I need you to review:
        https://docs.google.com/document/d/YOUR_DOC_ID/edit"
 ```
 
-Claude should automatically:
+The assistant should automatically:
 1. Recognize the Google Docs URL
 2. Invoke `gdoc-fetch` to download it
 3. Read the generated markdown
 4. Discuss the content with you
 
-For uploads, you can say e.g. "Create a Google Doc from docs/report.md" and Claude can run `gdoc-upload` and share the new doc link.
+For uploads, you can say e.g. "Create a Google Doc from docs/report.md" and the assistant can run `gdoc-upload` and share the new doc link.
 
 ---
 
@@ -387,7 +387,7 @@ gcloud auth list
 
 ---
 
-### Issue: Claude Code doesn't recognize the skill
+### Issue: Claude Code or Gemini CLI doesn't recognize the skill
 
 **Problem**: SKILL.md not in correct location or format issue
 
@@ -403,8 +403,8 @@ head -10 ~/.claude/skills/gdoc-fetch/SKILL.md
 # Should start with frontmatter (name: gdoc-skill or gdoc-fetch, description mentioning fetch and upload)
 ```
 
-**Solution 3: Restart Claude Code**
-- Exit Claude Code completely
+**Solution 3: Restart the Assistant**
+- Exit Claude Code or Gemini CLI completely
 - Restart it
 - Try again in a new conversation
 
@@ -486,8 +486,9 @@ If you need to remove gdoc-skill (gdoc-fetch and gdoc-upload):
 # Uninstall the package (removes both CLIs)
 pip3 uninstall gdoc-fetch
 
-# Remove the skill from Claude Code
+# Remove the skill from the Assistant
 rm -rf ~/.claude/skills/gdoc-fetch
+# For Gemini CLI: gemini skills uninstall gdoc-skill
 
 # Remove source directory (optional)
 rm -rf ~/path/to/gdoc-fetcher
@@ -542,7 +543,7 @@ gdoc-upload --help
 Once installed and working:
 
 1. **Try it with your own documents** - Start with a simple doc
-2. **Use it in Claude Code** - Let Claude fetch and analyze docs for you
+2. **Use it in Claude Code or Gemini CLI** - Let the assistant fetch and analyze docs for you
 3. **Explore the code** - The codebase is well-documented and tested
 4. **Contribute improvements** - Found a bug or have a feature idea? Contribute!
 
@@ -551,7 +552,7 @@ Once installed and working:
 ## Support & Resources
 
 - **GitHub**: https://github.com/sean-sheng/gdoc-fetcher
-- **Documentation**: `SKILL.md` - Claude Code integration guide
+- **Documentation**: `SKILL.md` - Claude Code & Gemini CLI integration guide
 - **Tests**: `tests/` - 121 comprehensive unit tests
 - **Google Cloud SDK**: https://cloud.google.com/sdk/docs
 - **Issues**: https://github.com/sean-sheng/gdoc-fetcher/issues
