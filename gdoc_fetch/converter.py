@@ -63,22 +63,48 @@ class DocsToHtmlParser:
         return ''
 
     def _parse_table(self, table: Dict[str, Any]) -> str:
-        """Parse a table element into HTML."""
+        """Parse a table element into narrative HTML using header row as field titles."""
         rows = table.get('tableRows', [])
         if not rows:
             return ''
 
-        html_rows = []
-        for row_idx, row in enumerate(rows):
-            cells = row.get('tableCells', [])
-            html_cells = []
-            for cell in cells:
-                cell_html = self._parse_cell_content(cell.get('content', []))
-                tag = 'th' if row_idx == 0 else 'td'
-                html_cells.append(f'<{tag}>{cell_html}</{tag}>')
-            html_rows.append(f'<tr>{"".join(html_cells)}</tr>')
+        # Extract header labels from the first row
+        headers = []
+        for cell in rows[0].get('tableCells', []):
+            text = self._extract_cell_text(cell.get('content', []))
+            headers.append(text)
 
-        return f'<table>{"".join(html_rows)}</table>'
+        # Convert each data row into a narrative block
+        html_parts = []
+        for row in rows[1:]:
+            cells = row.get('tableCells', [])
+            row_parts = []
+            for col_idx, cell in enumerate(cells):
+                cell_html = self._parse_cell_content(cell.get('content', []))
+                if not cell_html.strip():
+                    continue
+                header = headers[col_idx] if col_idx < len(headers) else ''
+                if header:
+                    row_parts.append(f'<p><strong>{header}:</strong> {cell_html}</p>')
+                else:
+                    row_parts.append(f'<p>{cell_html}</p>')
+            if row_parts:
+                html_parts.append(''.join(row_parts))
+
+        if not html_parts:
+            return ''
+
+        return '<hr>'.join(html_parts) + '<hr>'
+
+    def _extract_cell_text(self, content: List[Dict[str, Any]]) -> str:
+        """Extract plain text from cell content for use as a label."""
+        texts = []
+        for elem in content:
+            if 'paragraph' in elem:
+                for pe in elem['paragraph'].get('elements', []):
+                    if 'textRun' in pe:
+                        texts.append(pe['textRun'].get('content', '').strip())
+        return ' '.join(t for t in texts if t)
 
     def _parse_cell_content(self, content: List[Dict[str, Any]]) -> str:
         """Parse the content elements inside a table cell."""
